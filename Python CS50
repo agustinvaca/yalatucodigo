@@ -9,8 +9,7 @@ d = {}
 # Open database
 with open(sys.argv[1], 'r') as names:
     start_database = csv.reader(names)
-    for line in start_database:
-        database.append(line)
+    database = list(start_database)
 
 #Open sequence
 with open(sys.argv[2], 'r') as file:
@@ -30,25 +29,39 @@ for i in range(str_count):
     len_charact = len(which_one)
     start = 0
     finish = len_charact
+    d["counter{0}".format(str_iterator)] = 0
     for x in range(length):
         #Create counter and set to 0
-        d["counter{0}".format(str_iterator)] = 0
+        highest_count = 0
         #Section to be checked
         seq = sequence[start:finish]
         #Check if match
         if seq == which_one:
-            d["counter{0}".format(str_iterator)] += 1
+            highest_count += 1
             #Check if next set matches
             while seq == which_one:
                 start += len_charact
                 finish += len_charact
                 seq = sequence[start:finish]
                 if seq == which_one:
-                    d["counter{0}".format(str_iterator)] += 1
+                    highest_count += 1
+            if highest_count > d["counter{0}".format(str_iterator)]:
+                d["counter{0}".format(str_iterator)] = highest_count
         #Move to next
         start += 1
         finish += 1
         x += 1
     str_iterator += 1
     i += 1
+
+                    #columns
+for x in range(1, len(database)):
+    check = False         #rows
+    for s in range(1, len(database[0])):
+        if d['counter{0}'.format(s)] == database[x][s]:
+            check = True
+        else:
+            check = False
+        if check == False:
+            break
 
